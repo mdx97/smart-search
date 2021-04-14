@@ -20,7 +20,7 @@ where T: Ord
     }
 }
 
-/// Find an element in a sorted collection using Jump Search.
+/// Find an element in a sorted collection using jump search.
 pub fn find_jump<T>(collection: &Vec<T>, item: &T) -> Option<usize>
 where T: Ord
 {
@@ -56,7 +56,7 @@ where T: Ord
     }
 }
 
-/// Returns the square root of the collection size, which is mathematically proven to be the optimal jump size for Jump Search.
+/// Returns the square root of the collection size, which is mathematically proven to be the optimal jump size for jump search.
 fn get_optimal_jump_size<T>(collection: &Vec<T>) -> usize {
     ((collection.len() as f64).sqrt()) as usize
 }
