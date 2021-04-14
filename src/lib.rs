@@ -1,4 +1,4 @@
-/// A cache-aware search function.
+/// A cache-aware search function for sorted collections.
 pub fn find<T>(collection: &Vec<T>, item: &T) -> Option<usize>
 where T: Ord
 {
@@ -8,7 +8,7 @@ where T: Ord
     // TODO-Q: Boundary analyze? Should this be <= or <?
     if cache_size <= jump_size {
         return match collection.binary_search(item) {
-            Ok(index) => Some(index),
+            Ok(idx) => Some(idx),
             Err(_) => None,
         }
     } else {
@@ -16,14 +16,14 @@ where T: Ord
     }
 }
 
-/// Public wrapper function for the Jump Search implementation of find.
+/// Find an element in a sorted collection using Jump Search.
 pub fn find_jump<T>(collection: &Vec<T>, item: &T) -> Option<usize>
 where T: Ord
 {
     find_jump_with_size(collection, item, get_optimal_jump_size(collection))
 }
 
-/// Core jump search algorithm.
+/// Internal jump search algorithm.
 fn find_jump_with_size<T>(collection: &Vec<T>, item: &T, jump_size: usize) -> Option<usize>
 where T: Ord
 {
