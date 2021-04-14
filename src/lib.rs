@@ -8,8 +8,8 @@ where T: Ord
     let cache_line_size = CpuId::new()
         .get_cache_parameters()?
         .filter(|c| c.cache_type() == CacheType::Data)
-        .map(|c| c.sets() * c.associativity() * c.coherency_line_size())
-        .min();
+        .map(|c| c.coherency_line_size())
+        .min(); // TODO-Q: Can there be multiple data caches?
     if cache_line_size.is_some() && cache_line_size.unwrap() <= jump_size {
         return match collection.binary_search(item) {
             Ok(idx) => Some(idx),
