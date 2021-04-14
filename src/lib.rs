@@ -1,12 +1,16 @@
+use raw_cpuid::{CacheType, CpuId};
+
 /// A cache-aware search function for sorted collections.
 pub fn find<T>(collection: &Vec<T>, item: &T) -> Option<usize>
 where T: Ord
 {
-    // TODO: Research cache sizes and what we need here. Line size? Total cache size?
-    let cache_size = 0;
     let jump_size = get_optimal_jump_size(collection);
-    // TODO-Q: Boundary analyze? Should this be <= or <?
-    if cache_size <= jump_size {
+    let cache_line_size = CpuId::new()
+        .get_cache_parameters()?
+        .filter(|c| c.level() == 2 && c.cache_type() == CacheType::Data)
+        .map(|c| c.sets() * c.associativity() * c.coherency_line_size())
+        .min();
+    if cache_line_size.is_some() && cache_line_size.unwrap() <= jump_size {
         return match collection.binary_search(item) {
             Ok(idx) => Some(idx),
             Err(_) => None,
