@@ -7,7 +7,7 @@ where T: Ord
     let jump_size = get_optimal_jump_size(collection);
     let cache_line_size = CpuId::new()
         .get_cache_parameters()?
-        .filter(|c| c.level() == 2 && c.cache_type() == CacheType::Data)
+        .filter(|c| c.cache_type() == CacheType::Data)
         .map(|c| c.sets() * c.associativity() * c.coherency_line_size())
         .min();
     if cache_line_size.is_some() && cache_line_size.unwrap() <= jump_size {
